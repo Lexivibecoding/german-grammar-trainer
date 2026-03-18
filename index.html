@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch Trainer – AI German Grammar Exercises</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f0e0c; --surface: #1a1916; --surface2: #242320; --border: #2e2d29;
+    --gold: #d4a847; --gold-dim: #8a6c2a; --text: #e8e4da; --text-dim: #7a7670;
+    --green: #4caf7a; --red: #e05c5c; --blue: #6fa8d4;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  header { width: 100%; border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--gold); letter-spacing: -0.5px; }
+  .logo span { color: var(--text-dim); font-style: italic; font-size: 0.85rem; margin-left: 8px; }
+  .score-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 12px; }
+  .score-badge b { color: var(--gold); }
+  .main { width: 100%; max-width: 680px; padding: 32px 20px; flex: 1; }
+  #topic-screen h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--text); margin-bottom: 6px; line-height: 1.2; }
+  #topic-screen p { color: var(--text-dim); margin-bottom: 28px; font-size: 0.9rem; }
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .topic-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; cursor: pointer; text-align: left; transition: all 0.18s ease; color: var(--text); }
+  .topic-btn:hover { border-color: var(--gold-dim); background: var(--surface2); transform: translateY(-1px); }
+  .topic-btn .icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+  .topic-btn .label { font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 3px; }
+  .topic-btn .sub { font-size: 0.75rem; color: var(--text-dim); display: block; }
+  .level-row { display: flex; gap: 8px; margin-top: 20px; }
+  .level-chip { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); cursor: pointer; font-size: 0.8rem; font-weight: 500; text-align: center; transition: all 0.15s; }
+  .level-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(212,168,71,0.08); }
+  .level-chip:hover:not(.active) { border-color: var(--gold-dim); color: var(--text); }
+  .level-label { color: var(--text-dim); font-size: 0.78rem; margin-top: 12px; margin-bottom: 6px; display: block; }
+  #exercise-screen { display: none; }
+  .ex-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .back-btn { background: none; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .back-btn:hover { border-color: var(--gold-dim); color: var(--text); }
+  .topic-pill { background: rgba(212,168,71,0.12); border: 1px solid var(--gold-dim); border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; color: var(--gold); }
+  .progress-bar { width: 100%; height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 28px; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; }
+  .ex-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 16px; min-height: 200px; }
+  .ex-type { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .ex-question { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--text); margin-bottom: 20px; line-height: 1.5; }
+  .ex-question .blank { display: inline-block; border-bottom: 2px solid var(--gold); min-width: 80px; color: var(--gold); font-style: italic; }
+  .mc-options { display: flex; flex-direction: column; gap: 10px; }
+  .mc-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; cursor: pointer; font-size: 0.9rem; color: var(--text); transition: all 0.15s; text-align: left; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 10px; }
+  .mc-opt:hover:not(:disabled) { border-color: var(--gold-dim); background: rgba(212,168,71,0.05); }
+  .mc-opt .opt-letter { width: 24px; height: 24px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); flex-shrink: 0; }
+  .mc-opt.correct { border-color: var(--green); background: rgba(76,175,122,0.1); }
+  .mc-opt.correct .opt-letter { background: var(--green); color: #fff; }
+  .mc-opt.wrong { border-color: var(--red); background: rgba(224,92,92,0.1); }
+  .mc-opt.wrong .opt-letter { background: var(--red); color: #fff; }
+  .mc-opt:disabled { cursor: default; }
+  .fill-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 1rem; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s; margin-bottom: 12px; }
+  .fill-input:focus { border-color: var(--gold-dim); }
+  .fill-input.correct { border-color: var(--green); background: rgba(76,175,122,0.08); }
+  .fill-input.wrong { border-color: var(--red); background: rgba(224,92,92,0.08); }
+  .submit-btn { background: var(--gold); color: #0f0e0c; border: none; border-radius: 10px; padding: 11px 24px; font-weight: 600; font-size: 0.9rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .submit-btn:hover { background: #e0b84e; }
+  .submit-btn:disabled { opacity: 0.4; cursor: default; }
+  .feedback-box { border-radius: 12px; padding: 14px 18px; margin-top: 16px; font-size: 0.88rem; line-height: 1.6; display: none; }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct { background: rgba(76,175,122,0.1); border: 1px solid rgba(76,175,122,0.3); }
+  .feedback-box.wrong { background: rgba(224,92,92,0.1); border: 1px solid rgba(224,92,92,0.3); }
+  .feedback-box strong { display: block; margin-bottom: 4px; }
+  .feedback-box.correct strong { color: var(--green); }
+  .feedback-box.wrong strong { color: var(--red); }
+  .feedback-box p { color: var(--text); }
+  .next-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 11px 24px; font-weight: 500; font-size: 0.9rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; margin-top: 12px; }
+  .next-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .loading-state { display: flex; align-items: center; gap: 12px; padding: 40px 0; color: var(--text-dim); font-size: 0.9rem; }
+  .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #summary-screen { display: none; text-align: center; padding: 40px 20px; }
+  #summary-screen .big-score { font-family: 'DM Serif Display', serif; font-size: 4rem; color: var(--gold); }
+  #summary-screen h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin: 8px 0 12px; }
+  #summary-screen p { color: var(--text-dim); margin-bottom: 28px; }
+  .restart-btn { background: var(--gold); color: #0f0e0c; border: none; border-radius: 10px; padding: 13px 28px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; margin: 6px; }
+  .restart-btn:hover { background: #e0b84e; }
+  .error-msg { color: var(--red); font-size: 0.85rem; margin-top: 10px; display: none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Deutsch Trainer <span>by Claude</span></div>
+  <div class="score-badge">
+    <span>✓ <b id="hdr-correct">0</b></span>
+    <span>✗ <b id="hdr-wrong">0</b></span>
+  </div>
+</header>
+<div class="main">
+  <div id="topic-screen">
+    <h2>Was möchtest du<br>üben heute?</h2>
+    <p>Pick a grammar topic and your level to get started.</p>
+    <span class="level-label">Your level</span>
+    <div class="level-row">
+      <div class="level-chip active" data-level="A1-A2">A1–A2</div>
+      <div class="level-chip" data-level="B1-B2">B1–B2</div>
+      <div class="level-chip" data-level="C1-C2">C1–C2</div>
+    </div>
+    <span class="level-label" style="margin-top:20px;">Grammar topic</span>
+    <div class="topic-grid">
+      <button class="topic-btn" data-topic="German Cases (Nominative, Accusative, Dative, Genitive)">
+        <span class="icon">🔀</span><span class="label">Cases</span><span class="sub">Nom · Akk · Dat · Gen</span>
+      </button>
+      <button class="topic-btn" data-topic="Verb Conjugation (present, past, perfect tense)">
+        <span class="icon">⚡</span><span class="label">Verb Conjugation</span><span class="sub">Präsens · Perfekt · Präteritum</span>
+      </button>
+      <button class="topic-btn" data-topic="Articles and Gender (der, die, das, ein, eine)">
+        <span class="icon">🏷️</span><span class="label">Articles & Gender</span><span class="sub">der · die · das · ein · eine</span>
+      </button>
+      <button class="topic-btn" data-topic="Adjective Endings and Declension">
+        <span class="icon">✏️</span><span class="label">Adjective Endings</span><span class="sub">Declension in all cases</span>
+      </button>
+      <button class="topic-btn" data-topic="Modal Verbs (können, müssen, wollen, dürfen, sollen, mögen)">
+        <span class="icon">🎛️</span><span class="label">Modal Verbs</span><span class="sub">können · müssen · wollen</span>
+      </button>
+      <button class="topic-btn" data-topic="Prepositions and their cases (mit Dativ, durch Akkusativ, etc.)">
+        <span class="icon">📍</span><span class="label">Prepositions</span><span class="sub">mit Dativ · durch Akkusativ</span>
+      </button>
+      <button class="topic-btn" data-topic="Separable and Inseparable Verbs">
+        <span class="icon">🔗</span><span class="label">Separable Verbs</span><span class="sub">aufmachen · verstehen</span>
+      </button>
+      <button class="topic-btn" data-topic="Konjunktiv II (subjunctive mood, würden, wären, hätten)">
+        <span class="icon">💭</span><span class="label">Konjunktiv II</span><span class="sub">würde · wäre · hätte</span>
+      </button>
+    </div>
+  </div>
+  <div id="exercise-screen">
+    <div class="ex-header">
+      <button class="back-btn" onclick="goHome()">← Back</button>
+      <div class="topic-pill" id="topic-label">Cases</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="ex-card" id="ex-card">
+      <div class="loading-state"><div class="spinner"></div> Generating your exercise…</div>
+    </div>
+    <div class="feedback-box" id="feedback-box"></div>
+    <div class="error-msg" id="error-msg">⚠ Could not generate exercise. Please try again.</div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+      <button class="submit-btn" id="submit-btn" onclick="submitAnswer()" disabled>Check Answer</button>
+      <button class="next-btn" id="next-btn" onclick="nextExercise()" style="display:none">Next Exercise →</button>
+    </div>
+  </div>
+  <div id="summary-screen">
+    <div class="big-score" id="final-score">8/10</div>
+    <h2 id="summary-msg">Sehr gut!</h2>
+    <p id="summary-sub">You completed 10 exercises on Cases.</p>
+    <button class="restart-btn" onclick="goHome()">Try Another Topic</button>
+    <button class="restart-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);" onclick="startTopic(currentTopic)">Same Topic Again</button>
+  </div>
+</div>
+<script>
+let selectedLevel='A1-A2',currentTopic='',exercisesCompleted=0,correctCount=0,wrongCount=0;
+const TOTAL_EXERCISES=8;
+let currentExercise=null,answered=false,selectedMCIndex=null;
+document.querySelectorAll('.level-chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.level-chip').forEach(x=>x.classList.remove('active'));
+  c.classList.add('active');selectedLevel=c.dataset.level;
+}));
+document.querySelectorAll('.topic-btn').forEach(b=>b.addEventListener('click',()=>startTopic(b.dataset.topic)));
+function show(id){['topic-screen','exercise-screen','summary-screen'].forEach(s=>{document.getElementById(s).style.display=s===id?'block':'none';});}
+function goHome(){show('topic-screen');}
+function updateHeaderScore(){document.getElementById('hdr-correct').textContent=correctCount;document.getElementById('hdr-wrong').textContent=wrongCount;}
+async function startTopic(topic){
+  currentTopic=topic;exercisesCompleted=0;correctCount=0;wrongCount=0;answered=false;
+  updateHeaderScore();
+  document.getElementById('topic-label').textContent=topic.split('(')[0].trim();
+  show('exercise-screen');updateProgress();await loadExercise();
+}
+function updateProgress(){document.getElementById('progress-fill').style.width=(exercisesCompleted/TOTAL_EXERCISES*100)+'%';}
+async function loadExercise(){
+  answered=false;selectedMCIndex=null;
+  document.getElementById('ex-card').innerHTML='<div class="loading-state"><div class="spinner"></div> Generating your exercise…</div>';
+  document.getElementById('feedback-box').className='feedback-box';
+  document.getElementById('feedback-box').innerHTML='';
+  document.getElementById('error-msg').style.display='none';
+  document.getElementById('submit-btn').disabled=true;
+  document.getElementById('submit-btn').style.display='inline-block';
+  document.getElementById('next-btn').style.display='none';
+  const prompt=`You are a German grammar tutor. Generate ONE grammar exercise about: ${currentTopic}. Level: ${selectedLevel}.\n\nAlternate between exercise types (multiple choice and fill-in-the-blank). For this exercise, randomly pick one type.\n\nRespond ONLY with valid JSON in this exact format (no markdown, no extra text):\n\nFor multiple choice:\n{"type":"mc","question":"Full German sentence with ____ where the answer goes","options":["A","B","C","D"],"correct":0,"explanation":"Brief grammar explanation in English why this answer is correct (1-2 sentences)","hint":"Grammar rule reminder"}\n\nFor fill-in-the-blank:\n{"type":"fill","question":"Full German sentence with ____ where the answer goes","answer":"correct word or phrase","explanation":"Brief grammar explanation in English why this is correct (1-2 sentences)","hint":"Grammar rule reminder"}\n\nRules:\n- Make the sentence realistic and natural German\n- For mc, correct is the 0-indexed position of the right answer in options\n- Options must be plausible distractors\n- Keep sentences appropriate for the level\n- For fill, accept common spelling variations`;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await resp.json();
+    const text=data.content?.[0]?.text||'';
+    const m=text.match(/\{[\s\S]*\}/);
+    if(!m)throw new Error('No JSON');
+    currentExercise=JSON.parse(m[0]);
+    renderExercise(currentExercise);
+  }catch(e){
+    document.getElementById('ex-card').innerHTML='<div class="loading-state" style="color:var(--red)">⚠ Error loading exercise</div>';
+    document.getElementById('error-msg').style.display='block';
+  }
+}
+function renderExercise(ex){
+  const qHtml=ex.question.replace('____','<span class="blank">____</span>');
+  let html=`<div class="ex-type">${ex.type==='mc'?'Multiple Choice':'Fill in the Blank'} · ${currentTopic.split('(')[0].trim()}</div><div class="ex-question">${qHtml}</div>`;
+  if(ex.type==='mc'){
+    html+='<div class="mc-options">';
+    ['A','B','C','D'].forEach((l,i)=>{html+=`<button class="mc-opt" id="opt-${i}" onclick="selectMC(${i})"><span class="opt-letter">${l}</span>${ex.options[i]}</button>`;});
+    html+='</div>';
+  }else{
+    html+=`<div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;">💡 ${ex.hint}</div><input class="fill-input" id="fill-input" type="text" placeholder="Type your answer…" oninput="document.getElementById('submit-btn').disabled=this.value.trim().length===0" onkeydown="if(event.key==='Enter'&&!document.getElementById('submit-btn').disabled)submitAnswer()">`;
+  }
+  document.getElementById('ex-card').innerHTML=html;
+  if(ex.type==='mc'){document.getElementById('submit-btn').disabled=true;document.getElementById('submit-btn').style.display='none';}
+}
+function selectMC(idx){
+  if(answered)return;selectedMCIndex=idx;
+  document.querySelectorAll('.mc-opt').forEach(b=>b.style.borderColor='');
+  document.getElementById('opt-'+idx).style.borderColor='var(--gold)';
+  document.getElementById('submit-btn').style.display='inline-block';
+  document.getElementById('submit-btn').disabled=false;
+}
+function submitAnswer(){
+  if(answered)return;answered=true;
+  const ex=currentExercise;let isCorrect=false;
+  if(ex.type==='mc'){
+    isCorrect=selectedMCIndex===ex.correct;
+    document.querySelectorAll('.mc-opt').forEach((b,i)=>{b.disabled=true;b.style.borderColor='';if(i===ex.correct)b.classList.add('correct');else if(i===selectedMCIndex&&!isCorrect)b.classList.add('wrong');});
+  }else{
+    const inp=document.getElementById('fill-input');
+    const uv=inp.value.trim().toLowerCase(),cv=ex.answer.toLowerCase();
+    isCorrect=uv===cv||uv===cv.replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+    inp.disabled=true;inp.classList.add(isCorrect?'correct':'wrong');
+    if(!isCorrect)inp.value=inp.value+'  → '+ex.answer;
+  }
+  if(isCorrect)correctCount++;else wrongCount++;
+  exercisesCompleted++;updateHeaderScore();updateProgress();
+  const fb=document.getElementById('feedback-box');
+  fb.className='feedback-box show '+(isCorrect?'correct':'wrong');
+  fb.innerHTML=`<strong>${isCorrect?'✓ Richtig! Well done.':'✗ Falsch. Not quite.'}</strong><p>${ex.explanation}</p>`;
+  document.getElementById('submit-btn').style.display='none';
+  if(exercisesCompleted>=TOTAL_EXERCISES){document.getElementById('next-btn').textContent='See Results →';document.getElementById('next-btn').onclick=showSummary;}
+  document.getElementById('next-btn').style.display='inline-block';
+}
+function nextExercise(){loadExercise();}
+function showSummary(){
+  show('summary-screen');
+  const pct=Math.round(correctCount/TOTAL_EXERCISES*100);
+  document.getElementById('final-score').textContent=correctCount+'/'+TOTAL_EXERCISES;
+  const msgs=['Keep practising! 💪','Good effort! 👍','Gut gemacht! 🎉','Sehr gut! ⭐','Ausgezeichnet! 🏆'];
+  document.getElementById('summary-msg').textContent=msgs[Math.min(Math.floor(pct/20),4)];
+  document.getElementById('summary-sub').textContent=`You got ${correctCount} of ${TOTAL_EXERCISES} exercises correct on ${currentTopic.split('(')[0].trim()}.`;
+}
+show('topic-screen');
+</script>
+</body>
+</html>
