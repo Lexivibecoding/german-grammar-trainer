@@ -10,17 +10,36 @@
   :root {
     --bg: #0f0e0c; --surface: #1a1916; --surface2: #242320; --border: #2e2d29;
     --gold: #d4a847; --gold-dim: #8a6c2a; --text: #e8e4da; --text-dim: #7a7670;
-    --green: #4caf7a; --red: #e05c5c; --blue: #6fa8d4;
+    --green: #4caf7a; --red: #e05c5c;
   }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
   header { width: 100%; border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--gold); letter-spacing: -0.5px; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--gold); }
   .logo span { color: var(--text-dim); font-style: italic; font-size: 0.85rem; margin-left: 8px; }
   .score-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 12px; }
   .score-badge b { color: var(--gold); }
   .main { width: 100%; max-width: 680px; padding: 32px 20px; flex: 1; }
-  #topic-screen h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--text); margin-bottom: 6px; line-height: 1.2; }
-  #topic-screen p { color: var(--text-dim); margin-bottom: 28px; font-size: 0.9rem; }
+
+  /* API KEY SCREEN */
+  #apikey-screen { text-align: center; padding: 40px 0; }
+  #apikey-screen .icon { font-size: 3rem; margin-bottom: 16px; }
+  #apikey-screen h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
+  #apikey-screen p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+  #apikey-screen a { color: var(--gold); text-decoration: none; }
+  #apikey-screen a:hover { text-decoration: underline; }
+  .key-input-wrap { position: relative; margin-bottom: 12px; }
+  .key-input { width: 100%; padding: 13px 44px 13px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 0.9rem; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s; }
+  .key-input:focus { border-color: var(--gold-dim); }
+  .toggle-eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; }
+  .save-btn { width: 100%; background: var(--gold); color: #0f0e0c; border: none; border-radius: 10px; padding: 13px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .save-btn:hover { background: #e0b84e; }
+  .key-note { font-size: 0.75rem; color: var(--text-dim); margin-top: 10px; line-height: 1.5; }
+  .key-error { color: var(--red); font-size: 0.82rem; margin-top: 8px; display: none; }
+
+  /* TOPIC SCREEN */
+  #topic-screen { display: none; }
+  #topic-screen h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 6px; line-height: 1.2; }
+  #topic-screen > p { color: var(--text-dim); margin-bottom: 28px; font-size: 0.9rem; }
   .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .topic-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; cursor: pointer; text-align: left; transition: all 0.18s ease; color: var(--text); }
   .topic-btn:hover { border-color: var(--gold-dim); background: var(--surface2); transform: translateY(-1px); }
@@ -32,6 +51,10 @@
   .level-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(212,168,71,0.08); }
   .level-chip:hover:not(.active) { border-color: var(--gold-dim); color: var(--text); }
   .level-label { color: var(--text-dim); font-size: 0.78rem; margin-top: 12px; margin-bottom: 6px; display: block; }
+  .change-key-btn { background: none; border: none; color: var(--text-dim); font-size: 0.75rem; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; margin-top: 8px; }
+  .change-key-btn:hover { color: var(--text); }
+
+  /* EXERCISE SCREEN */
   #exercise-screen { display: none; }
   .ex-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
   .back-btn { background: none; border: 1px solid var(--border); color: var(--text-dim); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
@@ -66,19 +89,20 @@
   .feedback-box strong { display: block; margin-bottom: 4px; }
   .feedback-box.correct strong { color: var(--green); }
   .feedback-box.wrong strong { color: var(--red); }
-  .feedback-box p { color: var(--text); }
   .next-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 11px 24px; font-weight: 500; font-size: 0.9rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; margin-top: 12px; }
   .next-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
   .loading-state { display: flex; align-items: center; gap: 12px; padding: 40px 0; color: var(--text-dim); font-size: 0.9rem; }
   .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .error-msg { color: var(--red); font-size: 0.85rem; margin-top: 10px; display: none; }
+
+  /* SUMMARY */
   #summary-screen { display: none; text-align: center; padding: 40px 20px; }
   #summary-screen .big-score { font-family: 'DM Serif Display', serif; font-size: 4rem; color: var(--gold); }
   #summary-screen h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin: 8px 0 12px; }
   #summary-screen p { color: var(--text-dim); margin-bottom: 28px; }
   .restart-btn { background: var(--gold); color: #0f0e0c; border: none; border-radius: 10px; padding: 13px 28px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; margin: 6px; }
   .restart-btn:hover { background: #e0b84e; }
-  .error-msg { color: var(--red); font-size: 0.85rem; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
@@ -89,7 +113,27 @@
     <span>✗ <b id="hdr-wrong">0</b></span>
   </div>
 </header>
+
 <div class="main">
+
+  <!-- API KEY SCREEN -->
+  <div id="apikey-screen">
+    <div class="icon">🔑</div>
+    <h2>Enter your API Key</h2>
+    <p>This app uses the Claude API to generate exercises.<br>
+      Get a free key at <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com/keys</a>.<br>
+      Your key is stored only in your browser (localStorage) and never sent anywhere except Anthropic.
+    </p>
+    <div class="key-input-wrap">
+      <input class="key-input" id="key-input" type="password" placeholder="sk-ant-api03-…" autocomplete="off">
+      <button class="toggle-eye" onclick="toggleEye()">👁</button>
+    </div>
+    <div class="key-error" id="key-error">Please enter a valid Anthropic API key (starts with sk-ant-)</div>
+    <button class="save-btn" onclick="saveKey()">Start Practising →</button>
+    <p class="key-note">🔒 Your key stays in your browser only — it's never logged or shared.</p>
+  </div>
+
+  <!-- TOPIC SCREEN -->
   <div id="topic-screen">
     <h2>Was möchtest du<br>üben heute?</h2>
     <p>Pick a grammar topic and your level to get started.</p>
@@ -126,125 +170,211 @@
         <span class="icon">💭</span><span class="label">Konjunktiv II</span><span class="sub">würde · wäre · hätte</span>
       </button>
     </div>
+    <div style="text-align:center;margin-top:20px;">
+      <button class="change-key-btn" onclick="changeKey()">🔑 Change API key</button>
+    </div>
   </div>
+
+  <!-- EXERCISE SCREEN -->
   <div id="exercise-screen">
     <div class="ex-header">
       <button class="back-btn" onclick="goHome()">← Back</button>
-      <div class="topic-pill" id="topic-label">Cases</div>
+      <div class="topic-pill" id="topic-label"></div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     <div class="ex-card" id="ex-card">
       <div class="loading-state"><div class="spinner"></div> Generating your exercise…</div>
     </div>
     <div class="feedback-box" id="feedback-box"></div>
-    <div class="error-msg" id="error-msg">⚠ Could not generate exercise. Please try again.</div>
+    <div class="error-msg" id="error-msg">⚠ Could not generate exercise. Check your API key or try again.</div>
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
       <button class="submit-btn" id="submit-btn" onclick="submitAnswer()" disabled>Check Answer</button>
       <button class="next-btn" id="next-btn" onclick="nextExercise()" style="display:none">Next Exercise →</button>
     </div>
   </div>
+
+  <!-- SUMMARY SCREEN -->
   <div id="summary-screen">
-    <div class="big-score" id="final-score">8/10</div>
-    <h2 id="summary-msg">Sehr gut!</h2>
-    <p id="summary-sub">You completed 10 exercises on Cases.</p>
+    <div class="big-score" id="final-score"></div>
+    <h2 id="summary-msg"></h2>
+    <p id="summary-sub"></p>
     <button class="restart-btn" onclick="goHome()">Try Another Topic</button>
     <button class="restart-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);" onclick="startTopic(currentTopic)">Same Topic Again</button>
   </div>
+
 </div>
+
 <script>
-let selectedLevel='A1-A2',currentTopic='',exercisesCompleted=0,correctCount=0,wrongCount=0;
-const TOTAL_EXERCISES=8;
-let currentExercise=null,answered=false,selectedMCIndex=null;
-document.querySelectorAll('.level-chip').forEach(c=>c.addEventListener('click',()=>{
-  document.querySelectorAll('.level-chip').forEach(x=>x.classList.remove('active'));
-  c.classList.add('active');selectedLevel=c.dataset.level;
+let apiKey = localStorage.getItem('dt_api_key') || '';
+let selectedLevel = 'A1-A2', currentTopic = '', exercisesCompleted = 0, correctCount = 0, wrongCount = 0;
+const TOTAL = 8;
+let currentExercise = null, answered = false, selectedMCIndex = null;
+
+function show(id) {
+  ['apikey-screen','topic-screen','exercise-screen','summary-screen'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? 'block' : 'none';
+  });
+}
+
+function toggleEye() {
+  const inp = document.getElementById('key-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function saveKey() {
+  const val = document.getElementById('key-input').value.trim();
+  const err = document.getElementById('key-error');
+  if (!val.startsWith('sk-ant-') && !val.startsWith('sk-')) {
+    err.style.display = 'block'; return;
+  }
+  err.style.display = 'none';
+  apiKey = val;
+  localStorage.setItem('dt_api_key', apiKey);
+  show('topic-screen');
+}
+
+function changeKey() {
+  localStorage.removeItem('dt_api_key');
+  apiKey = '';
+  document.getElementById('key-input').value = '';
+  show('apikey-screen');
+}
+
+// Level chips
+document.querySelectorAll('.level-chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('.level-chip').forEach(x => x.classList.remove('active'));
+  c.classList.add('active'); selectedLevel = c.dataset.level;
 }));
-document.querySelectorAll('.topic-btn').forEach(b=>b.addEventListener('click',()=>startTopic(b.dataset.topic)));
-function show(id){['topic-screen','exercise-screen','summary-screen'].forEach(s=>{document.getElementById(s).style.display=s===id?'block':'none';});}
-function goHome(){show('topic-screen');}
-function updateHeaderScore(){document.getElementById('hdr-correct').textContent=correctCount;document.getElementById('hdr-wrong').textContent=wrongCount;}
-async function startTopic(topic){
-  currentTopic=topic;exercisesCompleted=0;correctCount=0;wrongCount=0;answered=false;
-  updateHeaderScore();
-  document.getElementById('topic-label').textContent=topic.split('(')[0].trim();
-  show('exercise-screen');updateProgress();await loadExercise();
+document.querySelectorAll('.topic-btn').forEach(b => b.addEventListener('click', () => startTopic(b.dataset.topic)));
+
+function updateScore() {
+  document.getElementById('hdr-correct').textContent = correctCount;
+  document.getElementById('hdr-wrong').textContent = wrongCount;
 }
-function updateProgress(){document.getElementById('progress-fill').style.width=(exercisesCompleted/TOTAL_EXERCISES*100)+'%';}
-async function loadExercise(){
-  answered=false;selectedMCIndex=null;
-  document.getElementById('ex-card').innerHTML='<div class="loading-state"><div class="spinner"></div> Generating your exercise…</div>';
-  document.getElementById('feedback-box').className='feedback-box';
-  document.getElementById('feedback-box').innerHTML='';
-  document.getElementById('error-msg').style.display='none';
-  document.getElementById('submit-btn').disabled=true;
-  document.getElementById('submit-btn').style.display='inline-block';
-  document.getElementById('next-btn').style.display='none';
-  const prompt=`You are a German grammar tutor. Generate ONE grammar exercise about: ${currentTopic}. Level: ${selectedLevel}.\n\nAlternate between exercise types (multiple choice and fill-in-the-blank). For this exercise, randomly pick one type.\n\nRespond ONLY with valid JSON in this exact format (no markdown, no extra text):\n\nFor multiple choice:\n{"type":"mc","question":"Full German sentence with ____ where the answer goes","options":["A","B","C","D"],"correct":0,"explanation":"Brief grammar explanation in English why this answer is correct (1-2 sentences)","hint":"Grammar rule reminder"}\n\nFor fill-in-the-blank:\n{"type":"fill","question":"Full German sentence with ____ where the answer goes","answer":"correct word or phrase","explanation":"Brief grammar explanation in English why this is correct (1-2 sentences)","hint":"Grammar rule reminder"}\n\nRules:\n- Make the sentence realistic and natural German\n- For mc, correct is the 0-indexed position of the right answer in options\n- Options must be plausible distractors\n- Keep sentences appropriate for the level\n- For fill, accept common spelling variations`;
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const data=await resp.json();
-    const text=data.content?.[0]?.text||'';
-    const m=text.match(/\{[\s\S]*\}/);
-    if(!m)throw new Error('No JSON');
-    currentExercise=JSON.parse(m[0]);
+
+async function startTopic(topic) {
+  currentTopic = topic; exercisesCompleted = 0; correctCount = 0; wrongCount = 0; answered = false;
+  updateScore();
+  document.getElementById('topic-label').textContent = topic.split('(')[0].trim();
+  show('exercise-screen'); updateProgress(); await loadExercise();
+}
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width = (exercisesCompleted / TOTAL * 100) + '%';
+}
+
+function goHome() { show('topic-screen'); }
+
+async function loadExercise() {
+  answered = false; selectedMCIndex = null;
+  document.getElementById('ex-card').innerHTML = '<div class="loading-state"><div class="spinner"></div> Generating your exercise…</div>';
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').style.display = 'inline-block';
+  document.getElementById('next-btn').style.display = 'none';
+
+  const prompt = `You are a German grammar tutor. Generate ONE grammar exercise about: ${currentTopic}. Level: ${selectedLevel}.
+Randomly pick either multiple choice or fill-in-the-blank.
+Respond ONLY with valid JSON (no markdown):
+For mc: {"type":"mc","question":"sentence with ____ ","options":["A","B","C","D"],"correct":0,"explanation":"why correct (English, 1-2 sentences)","hint":"grammar rule"}
+For fill: {"type":"fill","question":"sentence with ____ ","answer":"word","explanation":"why correct (English, 1-2 sentences)","hint":"grammar rule"}
+Rules: natural German, plausible distractors, level-appropriate.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
+    });
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content?.[0]?.text || '';
+    const m = text.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('No JSON');
+    currentExercise = JSON.parse(m[0]);
     renderExercise(currentExercise);
-  }catch(e){
-    document.getElementById('ex-card').innerHTML='<div class="loading-state" style="color:var(--red)">⚠ Error loading exercise</div>';
-    document.getElementById('error-msg').style.display='block';
+  } catch(e) {
+    document.getElementById('ex-card').innerHTML = '<div class="loading-state" style="color:var(--red)">⚠ Error loading exercise</div>';
+    document.getElementById('error-msg').style.display = 'block';
   }
 }
-function renderExercise(ex){
-  const qHtml=ex.question.replace('____','<span class="blank">____</span>');
-  let html=`<div class="ex-type">${ex.type==='mc'?'Multiple Choice':'Fill in the Blank'} · ${currentTopic.split('(')[0].trim()}</div><div class="ex-question">${qHtml}</div>`;
-  if(ex.type==='mc'){
-    html+='<div class="mc-options">';
-    ['A','B','C','D'].forEach((l,i)=>{html+=`<button class="mc-opt" id="opt-${i}" onclick="selectMC(${i})"><span class="opt-letter">${l}</span>${ex.options[i]}</button>`;});
-    html+='</div>';
-  }else{
-    html+=`<div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;">💡 ${ex.hint}</div><input class="fill-input" id="fill-input" type="text" placeholder="Type your answer…" oninput="document.getElementById('submit-btn').disabled=this.value.trim().length===0" onkeydown="if(event.key==='Enter'&&!document.getElementById('submit-btn').disabled)submitAnswer()">`;
+
+function renderExercise(ex) {
+  const qHtml = ex.question.replace('____', '<span class="blank">____</span>');
+  let html = `<div class="ex-type">${ex.type === 'mc' ? 'Multiple Choice' : 'Fill in the Blank'} · ${currentTopic.split('(')[0].trim()}</div>
+              <div class="ex-question">${qHtml}</div>`;
+  if (ex.type === 'mc') {
+    html += '<div class="mc-options">';
+    ['A','B','C','D'].forEach((l, i) => { html += `<button class="mc-opt" id="opt-${i}" onclick="selectMC(${i})"><span class="opt-letter">${l}</span>${ex.options[i]}</button>`; });
+    html += '</div>';
+  } else {
+    html += `<div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;">💡 ${ex.hint}</div>
+             <input class="fill-input" id="fill-input" type="text" placeholder="Type your answer…"
+               oninput="document.getElementById('submit-btn').disabled=this.value.trim().length===0"
+               onkeydown="if(event.key==='Enter'&&!document.getElementById('submit-btn').disabled)submitAnswer()">`;
   }
-  document.getElementById('ex-card').innerHTML=html;
-  if(ex.type==='mc'){document.getElementById('submit-btn').disabled=true;document.getElementById('submit-btn').style.display='none';}
+  document.getElementById('ex-card').innerHTML = html;
+  if (ex.type === 'mc') { document.getElementById('submit-btn').style.display = 'none'; }
 }
-function selectMC(idx){
-  if(answered)return;selectedMCIndex=idx;
-  document.querySelectorAll('.mc-opt').forEach(b=>b.style.borderColor='');
-  document.getElementById('opt-'+idx).style.borderColor='var(--gold)';
-  document.getElementById('submit-btn').style.display='inline-block';
-  document.getElementById('submit-btn').disabled=false;
+
+function selectMC(idx) {
+  if (answered) return; selectedMCIndex = idx;
+  document.querySelectorAll('.mc-opt').forEach(b => b.style.borderColor = '');
+  document.getElementById('opt-' + idx).style.borderColor = 'var(--gold)';
+  document.getElementById('submit-btn').style.display = 'inline-block';
+  document.getElementById('submit-btn').disabled = false;
 }
-function submitAnswer(){
-  if(answered)return;answered=true;
-  const ex=currentExercise;let isCorrect=false;
-  if(ex.type==='mc'){
-    isCorrect=selectedMCIndex===ex.correct;
-    document.querySelectorAll('.mc-opt').forEach((b,i)=>{b.disabled=true;b.style.borderColor='';if(i===ex.correct)b.classList.add('correct');else if(i===selectedMCIndex&&!isCorrect)b.classList.add('wrong');});
-  }else{
-    const inp=document.getElementById('fill-input');
-    const uv=inp.value.trim().toLowerCase(),cv=ex.answer.toLowerCase();
-    isCorrect=uv===cv||uv===cv.replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
-    inp.disabled=true;inp.classList.add(isCorrect?'correct':'wrong');
-    if(!isCorrect)inp.value=inp.value+'  → '+ex.answer;
+
+function submitAnswer() {
+  if (answered) return; answered = true;
+  const ex = currentExercise; let isCorrect = false;
+  if (ex.type === 'mc') {
+    isCorrect = selectedMCIndex === ex.correct;
+    document.querySelectorAll('.mc-opt').forEach((b, i) => {
+      b.disabled = true; b.style.borderColor = '';
+      if (i === ex.correct) b.classList.add('correct');
+      else if (i === selectedMCIndex && !isCorrect) b.classList.add('wrong');
+    });
+  } else {
+    const inp = document.getElementById('fill-input');
+    const uv = inp.value.trim().toLowerCase(), cv = ex.answer.toLowerCase();
+    isCorrect = uv === cv || uv === cv.replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+    inp.disabled = true; inp.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) inp.value = inp.value + '  → ' + ex.answer;
   }
-  if(isCorrect)correctCount++;else wrongCount++;
-  exercisesCompleted++;updateHeaderScore();updateProgress();
-  const fb=document.getElementById('feedback-box');
-  fb.className='feedback-box show '+(isCorrect?'correct':'wrong');
-  fb.innerHTML=`<strong>${isCorrect?'✓ Richtig! Well done.':'✗ Falsch. Not quite.'}</strong><p>${ex.explanation}</p>`;
-  document.getElementById('submit-btn').style.display='none';
-  if(exercisesCompleted>=TOTAL_EXERCISES){document.getElementById('next-btn').textContent='See Results →';document.getElementById('next-btn').onclick=showSummary;}
-  document.getElementById('next-btn').style.display='inline-block';
+  if (isCorrect) correctCount++; else wrongCount++;
+  exercisesCompleted++; updateScore(); updateProgress();
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = `<strong>${isCorrect ? '✓ Richtig! Well done.' : '✗ Falsch. Not quite.'}</strong><p>${ex.explanation}</p>`;
+  document.getElementById('submit-btn').style.display = 'none';
+  if (exercisesCompleted >= TOTAL) {
+    document.getElementById('next-btn').textContent = 'See Results →';
+    document.getElementById('next-btn').onclick = showSummary;
+  }
+  document.getElementById('next-btn').style.display = 'inline-block';
 }
-function nextExercise(){loadExercise();}
-function showSummary(){
+
+function nextExercise() { loadExercise(); }
+
+function showSummary() {
   show('summary-screen');
-  const pct=Math.round(correctCount/TOTAL_EXERCISES*100);
-  document.getElementById('final-score').textContent=correctCount+'/'+TOTAL_EXERCISES;
-  const msgs=['Keep practising! 💪','Good effort! 👍','Gut gemacht! 🎉','Sehr gut! ⭐','Ausgezeichnet! 🏆'];
-  document.getElementById('summary-msg').textContent=msgs[Math.min(Math.floor(pct/20),4)];
-  document.getElementById('summary-sub').textContent=`You got ${correctCount} of ${TOTAL_EXERCISES} exercises correct on ${currentTopic.split('(')[0].trim()}.`;
+  document.getElementById('final-score').textContent = correctCount + '/' + TOTAL;
+  const pct = correctCount / TOTAL;
+  const msgs = ['Keep practising! 💪','Good effort! 👍','Gut gemacht! 🎉','Sehr gut! ⭐','Ausgezeichnet! 🏆'];
+  document.getElementById('summary-msg').textContent = msgs[Math.min(Math.floor(pct * 5), 4)];
+  document.getElementById('summary-sub').textContent = `You got ${correctCount} of ${TOTAL} correct on ${currentTopic.split('(')[0].trim()}.`;
 }
-show('topic-screen');
+
+// Init
+document.getElementById('key-input').addEventListener('keydown', e => { if(e.key==='Enter') saveKey(); });
+if (apiKey) { show('topic-screen'); } else { show('apikey-screen'); }
 </script>
 </body>
 </html>
